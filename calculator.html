@@ -199,11 +199,9 @@ function calculate(){
 
   const gca = ((ex*5 + me*3 + ac*1) / totalCredits).toFixed(2);
 
-  // Display GCA
   document.getElementById('gcaScore').textContent = `GCA: ${gca}`;
   document.getElementById('resultBox').style.display = 'block';
 
-  // Send the data to Vercel logs
   fetch("https://gca-calc.vercel.app/api/log", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
