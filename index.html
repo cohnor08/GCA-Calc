@@ -52,6 +52,14 @@
       text-align: center;
     }
 
+    p.notice {
+      margin: 0 0 10px;
+      font-size: 14px;
+      text-align: center;
+      color: #facc15; /* yellow accent */
+      font-weight: 600;
+    }
+
     p.lead {
       margin: 0 0 24px;
       font-size: 15px;
@@ -146,7 +154,8 @@
 <body>
   <div class="card">
     <h1>NCEA GCA Calculator</h1>
-    <p class="lead">Enter the credits you’ve earned this year to calculate your Grade Credit Average.</p>
+    <p class="notice">To get Academic 30s in Year 12, as of 28/08 your GCA must be higher than 4.33</p>
+    <p class="lead">Enter the total number of credits you’ve earned this year to calculate your GCA. Please note last year's credits don't count.</p>
 
     <form id="gcaForm" onsubmit="event.preventDefault(); calculate();">
       <div>
