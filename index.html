@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NCEA GCA Calculator</title>
+  <style>
+    :root{--bg:#0f172a;--card:#0b1220;--accent:#7dd3fc;--muted:#94a3b8;--glass: rgba(255,255,255,0.03)}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071130 0%, #07111a 100%);color:#e6eef8}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+    .card{width:100%;max-width:820px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:14px;padding:28px;box-shadow:0 8px 30px rgba(2,6,23,0.6);}
+    h1{margin:0 0 8px;font-size:22px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+
+    form.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input[type=number]{width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit;font-size:16px}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    button{padding:10px 14px;border-radius:10px;border:0;background:var(--accent);color:#052029;font-weight:600;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent)}
+
+    .result{margin-top:18px;padding:14px;border-radius:10px;background:rgba(255,255,255,0.02);display:none;flex-direction:column;gap:12px}
+    .big{font-size:28px;font-weight:700}
+    .small{color:var(--muted);font-size:13px}
+    .steps{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;color:var(--muted);font-size:14px;white-space:pre-line}
+
+    @media(max-width:760px){form.grid{grid-template-columns:repeat(2,1fr)}.big{font-size:22px}}
+    @media(max-width:420px){form.grid{grid-template-columns:1fr} .actions{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="main">
+      <h1>NCEA GCA Calculator</h1>
+      <p class="lead">Enter how many credits you've gained at each grade. The calculator will use: Excellence ×5, Merit ×3, Achieved ×1, then divide by total credits.</p>
+
+      <form id="gcaForm" class="grid" onsubmit="event.preventDefault(); calculate();">
+        <div>
+          <label for="ex">Excellence (E) credits</label>
+          <input id="ex" type="number" min="0" value="0" required>
+        </div>
+        <div>
+          <label for="me">Merit (M) credits</label>
+          <input id="me" type="number" min="0" value="0" required>
+        </div>
+        <div>
+          <label for="ac">Achieved (A) credits</label>
+          <input id="ac" type="number" min="0" value="0" required>
+        </div>
+        <div class="actions" style="grid-column:1/-1">
+          <button type="submit">Calculate</button>
+          <button type="reset" class="ghost" onclick="document.querySelector('.result').style.display='none'">Reset</button>
+        </div>
+      </form>
+
+      <div class="result" id="resultBox">
+        <div class="big" id="gcaScore">GCA: –</div>
+        <div class="steps" id="working"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculate(){
+      const ex = parseInt(document.getElementById('ex').value)||0;
+      const me = parseInt(document.getElementById('me').value)||0;
+      const ac = parseInt(document.getElementById('ac').value)||0;
+
+      const points = (ex*5) + (me*3) + (ac*1);
+      const totalCredits = ex+me+ac;
+      if(totalCredits === 0){
+        alert('Please enter at least 1 credit.');
+        return;
+      }
+
+      const gca = (points/totalCredits).toFixed(2);
+
+      document.getElementById('gcaScore').textContent = `GCA: ${gca}`;
+      document.getElementById('working').textContent = 
+        `${ex} × 5 = ${ex*5}\n${me} × 3 = ${me*3}\n${ac} × 1 = ${ac}\n\nTotal points = ${points}\nTotal credits = ${totalCredits}\n\n${points} ÷ ${totalCredits} = ${gca}`;
+
+      document.querySelector('.result').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
