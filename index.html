@@ -182,24 +182,35 @@
     </div>
   </div>
 
-  <script>
-    function calculate(){
-      const ex = parseInt(document.getElementById('ex').value)||0;
-      const me = parseInt(document.getElementById('me').value)||0;
-      const ac = parseInt(document.getElementById('ac').value)||0;
+<script>
+function calculate(){
+  const ex = parseInt(document.getElementById('ex').value) || 0;
+  const me = parseInt(document.getElementById('me').value) || 0;
+  const ac = parseInt(document.getElementById('ac').value) || 0;
 
-      const points = (ex*5) + (me*3) + (ac*1);
-      const totalCredits = ex + me + ac;
-      if(totalCredits === 0){
-        alert('Please enter at least 1 credit.');
-        return;
-      }
+  const totalCredits = ex + me + ac;
+  if(totalCredits === 0){
+    alert('Please enter at least 1 credit.');
+    return;
+  }
 
-      const gca = (points/totalCredits).toFixed(2);
+  const gca = ((ex*5 + me*3 + ac*1) / totalCredits).toFixed(2);
 
-      document.getElementById('gcaScore').textContent = `GCA: ${gca}`;
-      document.getElementById('resultBox').style.display = 'block';
-    }
-  </script>
+  // Display GCA
+  document.getElementById('gcaScore').textContent = `GCA: ${gca}`;
+  document.getElementById('resultBox').style.display = 'block';
+
+  // Send the data to Vercel logs
+  fetch("https://gca-calc.vercel.app/api/log", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ex, me, ac, gca })
+  })
+  .then(res => res.json())
+  .then(data => console.log("Server response:", data))
+  .catch(err => console.error(err));
+}
+</script>
+
 </body>
 </html>
