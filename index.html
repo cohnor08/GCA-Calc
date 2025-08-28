@@ -55,19 +55,35 @@
   <div class="card">
     <h1>Welcome to the GCA Calculator!</h1>
     <p>Please log in with your StAC account to access the calculator. This is to ensure it stays within StAC.</p>
-    <form id="loginForm">
-      <input type="email" id="username" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
+<form id="loginForm">
+  <input type="email" id="username" placeholder="Email" required>
+  <div id="emailError" style="color: #f87171; font-size: 14px; display: none; margin-bottom: 8px;">
+Login requires a valid StAC school email address
+  </div>
+  <input type="password" id="password" placeholder="Password" required>
+  <button type="submit">Login</button>
+</form>
   </div>
 
 <script>
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  const username = document.getElementById('username').value;
+  const usernameInput = document.getElementById('username');
+  const username = usernameInput.value.trim();
   const password = document.getElementById('password').value;
+  const emailError = document.getElementById('emailError');
+
+  // Reset previous error styles
+  usernameInput.style.borderColor = '#2d3748';
+  emailError.style.display = 'none';
+
+  // Validate email domain
+  if (!username.endsWith('@stacmail.net')) {
+    usernameInput.style.borderColor = '#f87171'; // red border
+    emailError.style.display = 'block'; // show message
+    return; // stop submission
+  }
 
   try {
     const res = await fetch("https://gca-calc.vercel.app/api/log", {
@@ -78,16 +94,15 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const data = await res.json();
     console.log("Server response:", data);
 
-    // Give a tiny delay to ensure logging is complete
     setTimeout(() => {
       window.location.href = 'calculator.html';
-    }, 200); // 200ms
+    }, 200); 
   } catch (err) {
     console.error(err);
-    alert("There was a problem logging in. Try again.");
   }
 });
 </script>
+
 
 </body>
 </html>
